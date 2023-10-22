@@ -1,0 +1,29 @@
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+    name: nfs-csi
+provisioner: nfs.csi.k8s.io
+parameters:
+    server: 95.217.20.138
+    share: /nfsshare
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+mountOptions:
+    - hard
+    - nfsvers=4.1
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-shared-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+
+  storageClassName: nfs-csi
